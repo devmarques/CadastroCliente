@@ -1,0 +1,7 @@
+Aplicativo para cadastro de clientes, necessariamente sendo pessoa física com consulta de CEP via JSON e envio de email
+com componentes INDY.
+
+Aplicação de conceitos de POO, padrão MVC e modo RAD de desenvolvimento presentes no projeto.
+
+Delphi Versão:
+Embarcadero® Delphi 10 Seatle
