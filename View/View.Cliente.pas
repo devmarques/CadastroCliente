@@ -43,11 +43,11 @@ type
     Label9: TLabel;
     Label10: TLabel;
     Label6: TLabel;
-    DBEdit2: TDBEdit;
-    DBEdit3: TDBEdit;
+    txtNome: TDBEdit;
+    txtCPF: TDBEdit;
     DBEdit4: TDBEdit;
-    DBEdit5: TDBEdit;
-    DBEdit6: TDBEdit;
+    txtEmail: TDBEdit;
+    txtTelefone: TDBEdit;
     DBEdit7: TDBEdit;
     DBEdit1: TDBEdit;
     Label11: TLabel;
@@ -152,17 +152,45 @@ end;
 
 procedure TfrmCliente.btnExcluirClick(Sender: TObject);
 begin
+  if cdsClientE.IsEmpty then
+  begin
+    MessageDlg('Não existe nenhum registro para ser excluído!', mtWarning, [mbOK], 0);
+    Exit;
+  end;
   cdsCliente.Delete;
 end;
 
 procedure TfrmCliente.btnSalvarClick(Sender: TObject);
+var
+  funcoes: iFuncoes;
 begin
+  funcoes := TFuncoes.New;
   if not (cdsCliente.State in [dsInsert, dsEdit]) then
     exit;
 
+  if (funcoes.OnlyNumbers(txtCPF.Text) <> EmptyStr) and not (FClienteController.ValidaCPF(funcoes.OnlyNumbers(txtCPF.Text))) then
+  begin
+    MessageDlg('O CPF informado não é válido!', mtWarning, [mbOK], 0);
+    txtCPF.SetFocus;
+    exit;
+  end;
+
+  if Trim(txtNome.Text) = EmptyStr then
+  begin
+    MessageDlg('O campo "Nome Completo" não foi informado!', mtWarning, [mbOK], 0);
+    txtNome.SetFocus;
+    exit;
+  end;
+
+  if (Trim(txtTelefone.Text) <> EmptyStr) and ((Length(txtTelefone.Text) > 9) or (Length(txtTelefone.Text) < 8)) then
+  begin
+    MessageDlg('O telefone informado não é válido!', mtWarning, [mbOK], 0);
+    txtTelefone.SetFocus;
+    exit;
+  end;
   cdsCliente.Post;
 
-  if not FClienteController.ValidaEnvioEmail(cdsCliente.FieldByName('email').AsString, cdsEmail) then
+  if not FClienteController.ValidaEnvioEmail(txtEmail.Text, cdsEmail) then
     Exit;
   FClienteController.CriarXMLCadastroCliente(cdsCliente);
   FClienteController.CarregaConfiguracaoEmail(cdsEmail);
@@ -204,6 +232,7 @@ procedure TfrmCliente.dsClienteStateChange(Sender: TObject);
 begin
   btnAdicionar.Visible := not (dsCliente.State in [dsInsert, dsEdit]);
   btnEditar.Visible := not (dsCliente.State in [dsInsert, dsEdit]);
+  btnExcluir.Visible := not (dsCliente.State in [dsInsert, dsEdit]);
   btnCancelar.Visible := dsCliente.State in [dsInsert, dsEdit];
   btnSalvar.Visible := dsCliente.State in [dsInsert, dsEdit];
 
@@ -256,9 +285,10 @@ begin
   if Trim(txtNomeConsulta.Text) <> EmptyStr then
     cdsCliente.Filter := cdsCliente.Filter + '  nome LIKE ' + QuotedStr('%' + txtNomeConsulta.Text + '%');
   if Trim(txtEstadoConsulta.Text) <> EmptyStr then
-    cdsCliente.Filter := cdsCliente.Filter + funcoes.iif(cdsCliente.Filter = EmptyStr, ' and ', '') + '  estado = ' + QuotedStr(txtEstadoConsulta.Text);
+    cdsCliente.Filter := cdsCliente.Filter + funcoes.iif(cdsCliente.Filter <> EmptyStr, ' and ', '') + '  estado = ' + QuotedStr(txtEstadoConsulta.Text);
   if Trim(txtCPFConsulta.Text) <> EmptyStr then
-    cdsCliente.Filter := cdsCliente.Filter + funcoes.iif(cdsCliente.Filter = EmptyStr, ' and ', '') + '  cpf = ' + QuotedStr(txtCPFConsulta.Text);
+    cdsCliente.Filter := cdsCliente.Filter + funcoes.iif(cdsCliente.Filter <> EmptyStr, ' and ', '') + '  cpf = ' + QuotedStr(txtCPFConsulta.Text);
+
   cdsCliente.Filtered := True;
 end;
 

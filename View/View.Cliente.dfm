@@ -129,16 +129,16 @@ object frmCliente: TfrmCliente
         Columns = <
           item
             Expanded = False
-            FieldName = 'nome'
-            Title.Caption = 'Nome Completo'
-            Width = 300
+            FieldName = 'cpf'
+            Title.Caption = 'CPF'
+            Width = 110
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'cpf'
-            Title.Caption = 'CPF'
-            Width = 110
+            FieldName = 'nome'
+            Title.Caption = 'Nome Completo'
+            Width = 448
             Visible = True
           end
           item
@@ -254,7 +254,7 @@ object frmCliente: TfrmCliente
           Height = 17
           Caption = 'Identidade'
         end
-        object DBEdit2: TDBEdit
+        object txtNome: TDBEdit
           Left = 111
           Top = 32
           Width = 618
@@ -263,7 +263,7 @@ object frmCliente: TfrmCliente
           DataSource = dsCliente
           TabOrder = 0
         end
-        object DBEdit3: TDBEdit
+        object txtCPF: TDBEdit
           Left = 111
           Top = 63
           Width = 121
@@ -304,7 +304,7 @@ object frmCliente: TfrmCliente
           Height = 17
           Caption = 'Telefone'
         end
-        object DBEdit5: TDBEdit
+        object txtEmail: TDBEdit
           Left = 111
           Top = 30
           Width = 618
@@ -313,10 +313,10 @@ object frmCliente: TfrmCliente
           DataSource = dsCliente
           TabOrder = 0
         end
-        object DBEdit6: TDBEdit
+        object txtTelefone: TDBEdit
           Left = 111
           Top = 61
-          Width = 618
+          Width = 202
           Height = 25
           DataField = 'telefone'
           DataSource = dsCliente
@@ -692,7 +692,7 @@ object frmCliente: TfrmCliente
     end
     object cdsClientecep: TStringField
       FieldName = 'cep'
-      EditMask = '99.999-000;0;_'
+      EditMask = '99.999-999;0;_'
       Size = 8
     end
     object cdsClientelogradouro: TStringField

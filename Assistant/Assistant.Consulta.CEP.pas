@@ -78,12 +78,15 @@ begin
     JSONValue := TJSONObject.ParseJSONValue(JSON);
     JSONObject := JSONValue as TJSONObject;
 
+    if not Assigned(JSONObject) then
+    begin
+      Exit;
+    end;
     FLogradouro := JSONObject.GetValue('logradouro').Value;
     FComplemento := JSONObject.GetValue('complemento').Value;
     FBairro := JSONObject.GetValue('bairro').Value;
     FCidade := JSONObject.GetValue('localidade').Value;
     FEstado := JSONObject.GetValue('uf').Value;
-
   finally
     FreeAndNil(Client);
     FreeAndNil(JSONObject);
